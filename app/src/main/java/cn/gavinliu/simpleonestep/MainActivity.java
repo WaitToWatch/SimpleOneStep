@@ -8,6 +8,7 @@ import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -30,9 +31,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        copyPrivateRawResuorceToPubliclyAccessibleFile();
+        copyPrivateRawResourceToPubliclyAccessibleFile();
 
-        mDragDropHelper = new DragDropHelper();
+        mDragDropHelper = new DragDropHelper();//拖动初始化
+        //拖动监听
         mDragDropHelper.setOnDropedListener(new DragDropHelper.OnDropedListener() {
             @Override
             public void onDroped() {
@@ -40,15 +42,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageView imageView = (ImageView) findViewById(R.id.icon);
+        ImageView imageView = (ImageView) findViewById(R.id.icon);//朋友圈
 
-        mDragDropHelper.setDropView(imageView);
+        mDragDropHelper.setDropView(imageView);//设置拖动对象
 
         findViewById(R.id.text).setOnLongClickListener(new View.OnLongClickListener() {
 
             @Override
             public boolean onLongClick(View v) {
-                mDragDropHelper.startDrag(v);
+                mDragDropHelper.startDrag(v);//开始拖动
                 return true;
             }
         });
@@ -57,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                mDragDropHelper.onTouchEvent(event);
+                mDragDropHelper.onTouchEvent(event);//拖动触摸
                 return false;
             }
         });
-
+//        Log.e("log", System.currentTimeMillis()+"");
         Intent intent = new Intent(Intent.ACTION_SEND, null);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         intent.setType("image/*");
@@ -73,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 imageView.setImageDrawable(info.loadIcon(packageManager));
                 pkgName = info.activityInfo.packageName;
                 className = info.activityInfo.name;
+//                Log.e("log", System.currentTimeMillis()+"");
+                break;
             }
         }
     }
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void copyPrivateRawResuorceToPubliclyAccessibleFile() {
+    private void copyPrivateRawResourceToPubliclyAccessibleFile() {
         InputStream inputStream = null;
         FileOutputStream outputStream = null;
         try {
